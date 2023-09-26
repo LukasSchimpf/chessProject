@@ -6,24 +6,6 @@ function initPiece(isWhite = true, type = ""){
   return {isWhite, type}
 }
 
-// Triggers function to run whenever value in thing updates
-/*
-function createRank(startWithWhite  = true){
-  let file  = [];
-  let lastSquareisWhite = startWithWhite;
-
-  for (let i = 0; i < 8; i++) {
-    if(i%2 == 0){
-      file.push({isWhite: startWithWhite, chessPiece:initChessPiece(true, "")});
-    }else{
-      file.push({isWhite: !startWithWhite, chessPiece:initChessPiece(false, "")});
-    }
-  }
-  return file;
-}
-*/
-
-
 function createBoard(){
   let board = [];
   for(let i=0; i<64;i++){
@@ -45,42 +27,21 @@ function accessSquare(board, rank, file){
 
 }
 
-/*
-function initPawns(board){
-  let file1 = board[1];
-  let file2 = board[6];
-
-  for (let i = 0; i < 8; i++) {
-    file1[i].chessPiece = initChessPiece(true, "P");
-    file2[i].chessPiece = initChessPiece(false, "P");
-  }  
-
-  return board;
-}
-*/
-
-/*
-function initChessBoard(){
-  let board = createBoard();
-  board = initPawns(board);
-  return board;
-}
-*/
 const [board, setBoard] = createSignal(initBoard(createBoard()));
+const [whitePerspective, setWhitePerspective] = createSignal(false);
 
 function isWhite(index){
         let col = index() % 8;
         let row = Math.floor(index()/8);
         let shouldFlip = row % 2;
         let cell = index() % 2;
-
 }
 
 function App() {
   console.log(board());
   return (
     <div class=" grid grid-cols-8">
-    <For each={board().toReversed()}>{
+    <For each={whitePerspective()? board().toReversed() : board()}>{
       (square, index)=>{
 
         let rowOdd = ((Math.floor(index()/8)) %2 == 1);
