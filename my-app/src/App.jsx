@@ -1,6 +1,6 @@
 import { createSignal, from } from "solid-js";
 import { createEffect } from "solid-js";
-import {initBoard, createBoard, makeMove, getPiece} from "./ChessLogic";
+import {initBoard, createBoard, movePiece} from "./ChessLogic";
 
 
 function App() {
@@ -13,8 +13,6 @@ function App() {
       <div class=" grid grid-cols-8">
       <For each={whitePerspective()? board() : board().toReversed()}>{
         (square, index)=>{
-          console.log(square)
-
           let rowOdd = ((Math.floor(index()/8)) %2 == 1);
           let cellOdd = (index() % 2 == 1);
           let isCellWhite = true;
@@ -54,7 +52,7 @@ function App() {
         console.log("Flipped Perspective")}}>Flip Board</button>
       </div>
       <div>
-        <button onclick={() =>{setBoard(makeMove(board(), "a", 2, "a", 3));
+        <button onclick={() =>{setBoard(movePiece(board(), "a", 2, "a", 3));
         console.log("Moved Piece");
         console.log(board())
         }}>Advance the white A Pawn</button>

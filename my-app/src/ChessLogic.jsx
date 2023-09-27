@@ -1,3 +1,4 @@
+import { from } from "solid-js";
 
 // create piece data structure
 function initPiece(isWhite = true, type = ""){
@@ -13,18 +14,19 @@ export function createBoard(){
   return board;
 }
 
+// creates a copy of a given board datastructure
 function copyBoard(board){
-    let newBoard = createBoard();
+  let newBoard = createBoard();
 
-    (board).forEach(cell => {
-        newBoard.push(cell);
-    });
+  (board).forEach(cell => {
+    newBoard.push(cell);
+  });
 
-    return newBoard;
+  return newBoard;
 }
 
 // Populate board with pieces in starting layout
-export function initBoard(board){
+export function initBoardOld(board){
 
   // White Back Rank
   board[0] = initPiece(true, "R");
@@ -60,9 +62,8 @@ export function initBoard(board){
 }
 
 // Populate board with pieces in starting layout
-export function initBoardNew(board){
-
-    let newBoard = copyBoard(board);
+export function initBoard(board){
+  let newBoard = structuredClone(board);
 
   // White Back Rank
   newBoard[0] = initPiece(true, "R");
@@ -99,29 +100,34 @@ export function initBoardNew(board){
 
 // Returns the index within the board datastructure of the field with given file and rank
 function cellIndex(file, rank){
-  let files = ["a","b","c","d","e","f","g","h"]
-  let fileNum = files.indexOf(file.toLowerCase()) 
+  let files = ["a","b","c","d","e","f","g","h"];
+  let fileNum = files.indexOf(file.toLowerCase());
 
-  return (rank-1)*8 + fileNum	
+  return (rank-1)*8 + fileNum;
 }
 
 // Returns the piece at the given field of the chess board
 export function getPiece(board, file, rank){
-  return board[cellIndex(file,rank)]
+  return board[cellIndex(file,rank)];
 }
 
 function setPiece(board, file, rank, piece){
+  let newBoard = structuredClone(board);
 
-  board[cellIndex(file, rank)] = piece
-  return board
+  newBoard[cellIndex(file, rank)] = piece;
+  return newBoard;
 }
 
-function movePiece(board, fromFile, fromRank, toFile, toRank){
-  let piece = getPiece(board, fromFile, fromRank)
-  setPiece(board, toFile, toRank, piece)
-  setPiece(board, fromFile, fromRank, {})
+export function movePiece(board, fromFile, fromRank, toFile, toRank){
+  let newBoard = structuredClone(board);
 
-  return board
+  const piece = getPiece(newBoard, fromFile, fromRank);
+  newBoard = setPiece(newBoard, toFile, toRank, piece);
+  newBoard = setPiece(newBoard, fromFile, fromRank, {});
+
+  console.log("Moved " + fromFile + fromRank + " to " + toFile + toRank);
+
+  return newBoard;
 }
 
 // Returns whether there is a piece on the current cell
@@ -197,7 +203,5 @@ export function makeMove(board, fromFile, fromRank, toFile, toRank){
   // let toIndex = cellIndex(toFile, toRank)
 
   // TODO: CHECK IF MOVE IS LEGAL
-
-  board = movePiece(board, fromFile, fromRank, toFile, toRank)
-  return board
+  return movePiece(board, fromFile, fromRank, toFile, toRank)
 }
