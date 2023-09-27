@@ -5,8 +5,8 @@ module.exports = {
   ],
   theme: {
     colors: {
-      'dark-square' : '#16a34a',
-      'light-square' : '#d9f99d',
+      'dark-square' : '#52525b',
+      'light-square' : '#d4d4d8',
       'white-piece':'#f8fafc',
       'black-piece':'#020617'
     },

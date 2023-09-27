@@ -30,8 +30,8 @@ export function initBoard(board){
   board[0] = initPiece(true, "R");
   board[1] = initPiece(true, "N");
   board[2] = initPiece(true, "B");
-  board[3] = initPiece(true, "K");
-  board[4] = initPiece(true, "Q");
+  board[3] = initPiece(true, "Q");
+  board[4] = initPiece(true, "K");
   board[5] = initPiece(true, "B");
   board[6] = initPiece(true, "N");
   board[7] = initPiece(true, "R");
@@ -45,8 +45,8 @@ export function initBoard(board){
   board[56] = initPiece(false, "R");
   board[57] = initPiece(false, "N");
   board[58] = initPiece(false, "B");
-  board[59] = initPiece(false, "K");
-  board[60] = initPiece(false, "Q");
+  board[59] = initPiece(false, "Q");
+  board[60] = initPiece(false, "K");
   board[61] = initPiece(false, "B");
   board[62] = initPiece(false, "N");
   board[63] = initPiece(false, "R");

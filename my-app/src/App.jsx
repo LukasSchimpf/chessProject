@@ -11,12 +11,15 @@ function App() {
   return (
     <div>
       <div class=" grid grid-cols-8">
-      <For each={whitePerspective()? board().toReversed() : board()}>{
+      <For each={whitePerspective()? board() : board().toReversed()}>{
         (square, index)=>{
+          console.log(square)
 
           let rowOdd = ((Math.floor(index()/8)) %2 == 1);
           let cellOdd = (index() % 2 == 1);
           let isCellWhite = true;
+          let pieceColor = "";
+          let cellContent = "";
 
           if(rowOdd){
             isCellWhite = cellOdd;
@@ -24,17 +27,21 @@ function App() {
             isCellWhite = !cellOdd;
           }
 
-          let cellContent = square ? square.type: "";
           let cellColor = isCellWhite? " bg-light-square": " bg-dark-square";
+          let cellCoordinateColor = !isCellWhite? " text-light-square":" text-dark-square"
 
-          let textColor = ""
-
-          if(square.piece != null){
-            textColor = square.piece.isWhite? "text-black-piece": "text-white-piece"
+          if(square){
+            cellContent = square.type;
+            pieceColor = square.isWhite? " text-black-piece": " text-white-piece";
           }
 
-          return <div class={"aspect-square " + cellColor}>
-            <div class={"place-self-center"+ textColor}>{cellContent}</div>
+          return <div class={" aspect-square" + cellColor}>
+            <div class={"text-xs" + cellCoordinateColor}>
+              a1
+            </div>
+            <div class={" text-4xl text-center"+ pieceColor}>
+              {cellContent}
+            </div>
           </div>;
 
         }
