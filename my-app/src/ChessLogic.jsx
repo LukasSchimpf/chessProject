@@ -125,15 +125,10 @@ export function movePiece(board, fromFile, fromRank, toFile, toRank){
   newBoard = setPiece(newBoard, toFile, toRank, piece);
   newBoard = setPiece(newBoard, fromFile, fromRank, {});
 
-  console.log("Moved " + fromFile + fromRank + " to " + toFile + toRank);
+  console.log("Moved " + piece.type + " from " + fromFile + fromRank + " to " + toFile + toRank);
 
   return newBoard;
 }
-
-// Returns whether there is a piece on the current cell
-// function isEmptyCell(board, file, rank){
-//   return board[cellIndex(file,rank)] == null
-// }
 
 // Returns an array of possible cells that a piece may move to
 function getPossibleMoves(board, file, rank){

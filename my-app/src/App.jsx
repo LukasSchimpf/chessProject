@@ -2,6 +2,16 @@ import { createSignal, from } from "solid-js";
 import { createEffect } from "solid-js";
 import {initBoard, createBoard, movePiece} from "./ChessLogic";
 
+function isCellWhite(index){
+  const isRowOdd = ((Math.floor(index/8)) %2 == 1);
+  const isCellOdd = (index % 2 == 1);
+
+  if(isRowOdd){
+    return isCellOdd;
+  }else{
+    return !isCellOdd;
+  }
+}
 
 function App() {
   const [board, setBoard] = createSignal(initBoard(createBoard()));
@@ -13,25 +23,12 @@ function App() {
       <div class=" grid grid-cols-8">
       <For each={whitePerspective()? board() : board().toReversed()}>{
         (square, index)=>{
-          let rowOdd = ((Math.floor(index()/8)) %2 == 1);
-          let cellOdd = (index() % 2 == 1);
-          let isCellWhite = true;
-          let pieceColor = "";
-          let cellContent = "";
 
-          if(rowOdd){
-            isCellWhite = cellOdd;
-          }else{
-            isCellWhite = !cellOdd;
-          }
+          const cellColor = isCellWhite(index())? " bg-light-square": " bg-dark-square";
+          const cellCoordinateColor = !isCellWhite(index())? " text-light-square":" text-dark-square"
 
-          let cellColor = isCellWhite? " bg-light-square": " bg-dark-square";
-          let cellCoordinateColor = !isCellWhite? " text-light-square":" text-dark-square"
-
-          if(square){
-            cellContent = square.type;
-            pieceColor = square.isWhite? " text-black-piece": " text-white-piece";
-          }
+          const pieceColor = square && square.isWhite? " text-black-piece": " text-white-piece";
+          const cellContent = square? square.type : "";
 
           return <div class={" aspect-square" + cellColor}>
             <div class={"text-xs" + cellCoordinateColor}>
