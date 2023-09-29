@@ -1,7 +1,7 @@
 import { createSignal, from } from "solid-js";
 import { createEffect } from "solid-js";
 import {initBoard, createBoard, movePiece} from "./ChessLogic";
-import ChessBoard from './components/ChessBoard'
+import ChessBoard from "./components/ChessBoard";
 
 function App() {
   const [board, setBoard] = createSignal(initBoard(createBoard()));
@@ -10,7 +10,6 @@ function App() {
   console.log(board());
 
   const indexes = Array.from(Array(64).keys());
-  console.log(indexes)
 
  return(
   <div>

@@ -1,5 +1,3 @@
-import { from } from "solid-js";
-
 // create piece data structure
 function initPiece(isWhite = true, type = ""){
   return {isWhite, type}
@@ -105,6 +103,7 @@ function cellIndex(file, rank){
 
   return (rank-1)*8 + fileNum;
 }
+
 
 // Returns the piece at the given field of the chess board
 export function getPiece(board, file, rank){
