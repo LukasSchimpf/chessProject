@@ -32,15 +32,16 @@ export default function ChessBoard(props){
     return(
       <div class=" grid grid-cols-8">
       <For each={props.whitePerspective? props.board : props.board.toReversed()}>{
-        (square, index)=>{
+        (item, index)=>{
 
           // Real index of the cell
-          const boardIndex = convertToBoardIndex(index())
+          const boardIndex = convertToBoardIndex(index());
+          const square = props.board[boardIndex];
 
           const cellColor = isCellWhite(boardIndex)? " bg-light-square": " bg-dark-square";
           const cellCoordinateColor = !isCellWhite(boardIndex)? " text-light-square":" text-dark-square";
 
-          const pieceColor = square && square.isWhite? " text-black-piece": " text-white-piece";
+          const pieceColor = square && square.isWhite? " text-white-piece": " text-black-piece";
           const cellContent = square? square.type : "";
 
           return <div class={" aspect-square" + cellColor}>

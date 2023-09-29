@@ -12,17 +12,6 @@ export function createBoard(){
   return board;
 }
 
-// creates a copy of a given board datastructure
-function copyBoard(board){
-  let newBoard = createBoard();
-
-  (board).forEach(cell => {
-    newBoard.push(cell);
-  });
-
-  return newBoard;
-}
-
 // Populate board with pieces in starting layout
 export function initBoardOld(board){
 
