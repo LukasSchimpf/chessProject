@@ -52,7 +52,6 @@ export default function ChessBoard(props){
               {cellContent}
             </div>
           </div>;
-
         }
         }
       </For>

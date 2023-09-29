@@ -2,28 +2,41 @@ import { createSignal, from } from "solid-js";
 import { createEffect } from "solid-js";
 import {initBoard, createBoard, movePiece} from "./ChessLogic";
 import ChessBoard from "./components/ChessBoard";
+import { createGame } from "./Game";
 
 function App() {
   const [board, setBoard] = createSignal(initBoard(createBoard()));
   const [whitePerspective, setWhitePerspective] = createSignal(true);
+  const [whitesTurn, setWhitesTurn] = createSignal(true);
+  const [gameState, setGameState] = createSignal(createGame());
 
   console.log(board());
-
-  const indexes = Array.from(Array(64).keys());
+  console.log(gameState());
 
  return(
   <div>
+    <div>{whitesTurn()? "White" :"Black" }'s Turn</div>
     <ChessBoard whitePerspective={whitePerspective()} board={board()} />
 
     <div>
-      <button onClick={() =>{setWhitePerspective(!whitePerspective());
-      console.log("Flipped Perspective")}}>Flip Board</button>
+      <button onClick={() =>{
+      setWhitePerspective(!whitePerspective());
+      console.log("Flipped Perspective")}}>
+          Flip Board
+      </button>
     </div>
     <div>
-      <button onclick={() =>{setBoard(movePiece(board(), "a", 2, "a", 3));
-      console.log("Moved Piece");
-      console.log(board())
-      }}>Advance the white A Pawn</button>
+      <button onclick={() =>{
+        setBoard(movePiece(board(), "d", 2, "d", 3));
+        console.log(board())}}>
+      Advance the white D Pawn
+      </button>
+    </div>
+    <div>
+      <button onclick={() =>{
+      setWhitesTurn(!whitesTurn())
+      setWhitePerspective(whitesTurn())
+      }}>Change whose turn it is</button>
     </div>
   </div>
  )
