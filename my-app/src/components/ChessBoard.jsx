@@ -1,3 +1,5 @@
+import Cell from "./Cell";
+
 const files = ["a","b","c","d","e","f","g","h"];
 
 function isCellWhite(index){
@@ -34,24 +36,13 @@ export default function ChessBoard(props){
       <For each={props.whitePerspective? props.board : props.board.toReversed()}>{
         (item, index)=>{
 
-          // Real index of the cell
+          // Get index in order of rendering cells
           const boardIndex = convertToBoardIndex(index());
-          const square = props.board[boardIndex];
 
-          const cellColor = isCellWhite(boardIndex)? " bg-light-square": " bg-dark-square";
-          const cellCoordinateColor = !isCellWhite(boardIndex)? " text-light-square":" text-dark-square";
+          return <Cell isCellWhite={isCellWhite(boardIndex)}
+            cellCoordinates={cellCoordinates(boardIndex)}
+            piece={props.board[boardIndex]}/>
 
-          const pieceColor = square && square.isWhite? " text-white-piece": " text-black-piece";
-          const cellContent = square? square.type : "";
-
-          return <div class={" aspect-square" + cellColor}>
-            <div class={"text-xs" + cellCoordinateColor}>
-              {cellCoordinates(boardIndex)}
-            </div>
-            <div class={" text-4xl text-center"+ pieceColor}>
-              {cellContent}
-            </div>
-          </div>;
         }
         }
       </For>

@@ -4,14 +4,15 @@ import {initBoard, createBoard, movePiece} from "./ChessLogic";
 import ChessBoard from "./components/ChessBoard";
 import { createGame } from "./Game";
 
+const [board, setBoard] = createSignal(initBoard(createBoard()));
+const [whitePerspective, setWhitePerspective] = createSignal(true);
+const [whitesTurn, setWhitesTurn] = createSignal(true);
+
 function App() {
-  const [board, setBoard] = createSignal(initBoard(createBoard()));
-  const [whitePerspective, setWhitePerspective] = createSignal(true);
-  const [whitesTurn, setWhitesTurn] = createSignal(true);
-  const [gameState, setGameState] = createSignal(createGame());
+  // const [gameState, setGameState] = createSignal(createGame());
 
   console.log(board());
-  console.log(gameState());
+  // console.log(gameState());
 
  return(
   <div>
