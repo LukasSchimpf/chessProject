@@ -38,11 +38,17 @@ export default function ChessBoard(props){
 
           // Get index in order of rendering cells
           const boardIndex = convertToBoardIndex(index());
+          const [file, rank] = cellCoordinates(boardIndex);
+          // console.log(file, rank)
 
           return <Cell isCellWhite={isCellWhite(boardIndex)}
-            cellCoordinates={cellCoordinates(boardIndex)}
-            piece={props.board[boardIndex]}/>
-
+            file={file}
+            rank={rank}
+            piece={props.board[boardIndex]}
+            piecePickUpHandler={props.piecePickUpHandler}
+            piecePutDownHandler={props.piecePutDownHandler}
+            isHoldingPiece={props.isHoldingPiece}
+            />
         }
         }
       </For>

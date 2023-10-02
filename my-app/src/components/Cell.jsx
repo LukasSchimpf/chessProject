@@ -1,7 +1,8 @@
 
 //* Props:
 //* isCellWhite: whether light square or dark square
-//* cellCoordinates: text representing the coordinates on the chessboard
+//* file: file coordinate of the current cell
+//* rank: rank coordinate of the current cell
 //* piece: piece object of the current cell
 export default function Cell(props){
     const cellColor = props.isCellWhite? " bg-light-square": " bg-dark-square";
@@ -10,12 +11,23 @@ export default function Cell(props){
     const pieceColor = props.piece && props.piece.isWhite? " text-white-piece": " text-black-piece";
     const cellContent = props.piece? props.piece.type : "";
 
-    return <div class={" aspect-square" + cellColor}>
-        <div class={"text-xs" + cellCoordinateColor}>
-            {props.cellCoordinates}
-        </div>
-        <div class={" text-4xl text-center"+ pieceColor}>
-            {cellContent}
-        </div>
-    </div>;
+    return <div
+        class={" aspect-square" + cellColor}
+        onClick={() => {
+            console.log("Clicked Cell " + props.file + props.rank);
+
+            if(props.isHoldingPiece()){
+                props.piecePutDownHandler(props.file, props.rank);
+
+            }else{
+                props.piecePickUpHandler(props.file, props.rank);
+            }
+        }}>
+            <div class={"text-xs" + cellCoordinateColor}>
+                {props.file + props.rank}
+            </div>
+            <div class={" text-4xl text-center"+ pieceColor}>
+                {cellContent}
+            </div>
+        </div>;
 }
