@@ -1,8 +1,6 @@
 import { createSignal, from } from "solid-js";
-import { createEffect } from "solid-js";
-import {initBoard, createBoard, movePiece, makeMove} from "./ChessLogic";
 import ChessBoard from "./components/ChessBoard";
-import { createGame } from "./Game";
+import { createGame, makeMove} from "./Game";
 
 function initMove(){
   return({
@@ -13,10 +11,8 @@ function initMove(){
   })
 }
 
-const [board, setBoard] = createSignal(initBoard(createBoard()));
 const [whitePerspective, setWhitePerspective] = createSignal(true);
-const [whitesTurn, setWhitesTurn] = createSignal(true);
-// const [gameState, setGameState] = createSignal(createGame());
+const [gameState, setGameState] = createSignal(createGame());
 const [currentMove, setCurrentMove] = createSignal(initMove());
 const [isHoldingPiece, setIsHoldingPiece] = createSignal(false);
 
@@ -48,22 +44,30 @@ function makeCurrentMove(){
   const move = currentMove();
   console.log(move);
 
-  setBoard(makeMove(board(), move.fromFile, move.fromRank, move.toFile, move.toRank));
+  const [success, newGameState] = makeMove(gameState(), move.fromFile, move.fromRank, move.toFile, move.toRank);
+
+  if(success){
+    console.log("Successfully Moved Piece")
+  }else{
+    console.log("Illegal move")
+  }
+  setGameState(newGameState);
+  console.log(gameState())
 
   setCurrentMove(initMove());
 }
 
 function App() {
 
-  console.log(board());
+  console.log(gameState());
 
  return(
   <div>
-    <div>{whitesTurn()? "White" :"Black" }'s Turn</div>
+    <div>{gameState().whitesTurn? "White" :"Black" }'s Turn</div>
 
     <ChessBoard 
-      whitePerspective={whitePerspective()}
-      board={board()}
+      whitePerspective={whitePerspective}
+      gameState={gameState}
       piecePickUpHandler={pickUpPiece}
       piecePutDownHandler={putDownPiece}
       isHoldingPiece={isHoldingPiece}
@@ -75,12 +79,6 @@ function App() {
       console.log("Flipped Perspective")}}>
           Flip Board
       </button>
-    </div>
-    <div>
-      <button onclick={() =>{
-      setWhitesTurn(!whitesTurn())
-      setWhitePerspective(whitesTurn())
-      }}>Change whose turn it is</button>
     </div>
   </div>
  )

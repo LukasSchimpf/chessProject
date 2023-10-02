@@ -31,9 +31,11 @@ function cellCoordinates(index){
 }
 
 export default function ChessBoard(props){
+  // let gameState = props.gameState();
+
     return(
       <div class=" grid grid-cols-8">
-      <For each={props.whitePerspective? props.board : props.board.toReversed()}>{
+      <For each={props.whitePerspective()? props.gameState().board : props.gameState().board.toReversed()}>{
         (item, index)=>{
 
           // Get index in order of rendering cells
@@ -44,7 +46,7 @@ export default function ChessBoard(props){
           return <Cell isCellWhite={isCellWhite(boardIndex)}
             file={file}
             rank={rank}
-            piece={props.board[boardIndex]}
+            piece={props.gameState().board[boardIndex]}
             piecePickUpHandler={props.piecePickUpHandler}
             piecePutDownHandler={props.piecePutDownHandler}
             isHoldingPiece={props.isHoldingPiece}

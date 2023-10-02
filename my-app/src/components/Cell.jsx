@@ -19,7 +19,7 @@ export default function Cell(props){
             if(props.isHoldingPiece()){
                 props.piecePutDownHandler(props.file, props.rank);
 
-            }else{
+            }else if(props.piece){
                 props.piecePickUpHandler(props.file, props.rank);
             }
         }}>
