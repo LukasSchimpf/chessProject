@@ -11,11 +11,11 @@ export default function Cell(props){
     const cellContent = props.piece? props.piece.type : "";
 
     return <div class={" aspect-square" + cellColor}>
-    <div class={"text-xs" + cellCoordinateColor}>
-        {props.cellCoordinates}
-    </div>
-    <div class={" text-4xl text-center"+ pieceColor}>
-        {cellContent}
-    </div>
+        <div class={"text-xs" + cellCoordinateColor}>
+            {props.cellCoordinates}
+        </div>
+        <div class={" text-4xl text-center"+ pieceColor}>
+            {cellContent}
+        </div>
     </div>;
 }

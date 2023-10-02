@@ -1,4 +1,4 @@
-const files = ["a","b","c","d","e","f","g","h"];
+const files = ['a','b','c','d','e','f','g','h'];
 
 // create piece data structure
 function initPiece(isWhite = true, type = ""){
@@ -53,7 +53,7 @@ export function initBoard(board){
 
 // Returns the index within the board datastructure of the field with given file and rank
 function cellIndex(file, rank){
-  const fileNum = files.indexOf(file.toLowerCase());
+  const fileNum = files.indexOf(file);
 
   return (rank-1)*8 + fileNum;
 }
@@ -73,19 +73,18 @@ export function setPiece(board, file, rank, piece){
 export function movePiece(board, fromFile, fromRank, toFile, toRank){
   let newBoard = structuredClone(board);
 
-  const piece = getPiece(newBoard, fromFile, fromRank);
-  newBoard = setPiece(newBoard, toFile, toRank, piece);
-  newBoard = setPiece(newBoard, fromFile, fromRank, {});
+  const fromIndex = cellIndex(fromFile, fromRank);
+  const toIndex = cellIndex(toFile, toRank);
 
-  console.log("Moved " + piece.type + " from " + fromFile + fromRank + " to " + toFile + toRank);
+  const piece = newBoard[fromIndex];
+  newBoard[toIndex] = piece;
+  newBoard[fromIndex] = {};
 
   return newBoard;
 }
 
 // Performs the desired move if legal
 export function makeMove(board, fromFile, fromRank, toFile, toRank){
-  const fromIndex = cellIndex(fromFile, fromRank)
-  const toIndex = cellIndex(toFile, toRank)
 
   // TODO: CHECK IF MOVE IS LEGAL
 
