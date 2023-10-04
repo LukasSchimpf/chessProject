@@ -1,9 +1,9 @@
 import Cell from "./Cell";
 import { createSignal } from "solid-js";
 import { makeMove,createGame } from "../Game";
-import { getPiece } from "../Board";
+import { getPiece, isEmpty } from "../Board";
 
-const files = ["a","b","c","d","e","f","g","h"];
+const files = ['a','b','c','d','e','f','g','h'];
 const [moveFromCell, setMoveFromCell] = createSignal([]);
 const [gameState, setGameState] = createSignal(createGame());
 
@@ -37,10 +37,11 @@ function cellCoordinates(index){
 
 function handleClickCell(file, rank){
   console.log("Clicked Cell "+file+rank);
-  if(moveFromCell() != []){
+
+  if(moveFromCell().length != 0){
       putDownPiece(file, rank);
 
-  }else if(getPiece(gameState().board, file, rank) != {}){
+  }else if(!isEmpty(gameState().board, file, rank)){
       pickUpPiece(file, rank);
   }else{
       console.log("Empty Cell")
@@ -54,19 +55,17 @@ function pickUpPiece(file, rank){
 }
 
 function putDownPiece(file, rank){
-  const [success, newGameState] = makeMove(gameState(), moveFromCell().file, moveFromCell.rank, file, rank);
+  const [success, newGameState] = makeMove(gameState(), moveFromCell()[0], moveFromCell()[1], file, rank);
   
-  console.log("Placed Piece at " + file+rank);
+  // Reset the current picked up piece
+  setMoveFromCell([]);
 
   if(success){
+    setGameState(newGameState);
     console.log("Successfully Moved Piece")
   }else{
     console.log("Illegal move")
   }
-
-  setMoveFromCell([]);
-
-  setGameState(newGameState);
 
   console.log(gameState())
 }
@@ -88,8 +87,8 @@ export default function ChessBoard(props){
               file={file}
               rank={rank}
               piece={gameState().board[boardIndex]}
-              handleClickCell={() => {
-                handleClickCell(file, rank)
+              handleClick={() => {
+                handleClickCell(file, rank);
               }}
             />
         }

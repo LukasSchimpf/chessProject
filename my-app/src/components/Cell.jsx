@@ -12,7 +12,9 @@ export default function Cell(props){
 
     return <div
             class={" aspect-square" + cellColor}
-            onClick={props.handleClickCell}
+            onClick={props.handleClick}
+            // onMouseDown={props.handleClick}
+            // onMouseUp={props.handleRelease}
         >
             <div class={"text-xs" + cellCoordinateColor}>
                 {props.file + props.rank}

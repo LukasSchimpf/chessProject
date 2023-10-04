@@ -63,6 +63,12 @@ export function getPiece(board, file, rank){
   return board[cellIndex(file,rank)];
 }
 
+export function isEmpty(board, file, rank){
+  if(Object.keys(board[cellIndex(file, rank)]).length == 0)
+    return true;
+  return false;
+}
+
 export function setPiece(board, file, rank, piece){
   let newBoard = structuredClone(board);
 
@@ -81,4 +87,18 @@ export function movePiece(board, fromFile, fromRank, toFile, toRank){
   newBoard[fromIndex] = {};
 
   return newBoard;
+}
+
+export function isInCheck(board, whiteNotBlack){
+  let indexOfKing = -1;
+
+  for(let i=0; i<64; i++){
+    if(Object.hasOwn(board[i], "type") && board[i].type == "K" && board[i].isWhite == whiteNotBlack)
+      indexOfKing = i;
+      break;
+  }
+
+  console.log("King found at "+indexOfKing);
+
+  return false;
 }
