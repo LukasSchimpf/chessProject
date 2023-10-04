@@ -82,14 +82,3 @@ export function movePiece(board, fromFile, fromRank, toFile, toRank){
 
   return newBoard;
 }
-
-// Performs the desired move if legal
-/*
-export function makeMove(game, fromFile, fromRank, toFile, toRank){
-  const board = game.board;
-
-  // TODO: CHECK IF MOVE IS LEGAL
-
-  return movePiece(board, fromFile, fromRank, toFile, toRank)
-}
-*/

@@ -5,14 +5,14 @@ export function createGame(){
     return {
         board: initBoard(createBoard()),
         whitesTurn: true,
-        whiteInCheck: false,
-        blackInCheck: false
+        whiteHasCastled: false,
+        blackHasCastled: false
     };
 }
 
 export function makeMove(game, fromFile, fromRank, toFile, toRank){
     if(!isLegalMove(fromFile, fromRank, toFile, toRank)){
-        return [false, game];
+        return [false, {}];
     }
 
     let newGame = structuredClone(game);

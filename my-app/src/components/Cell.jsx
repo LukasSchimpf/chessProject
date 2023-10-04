@@ -1,4 +1,3 @@
-
 //* Props:
 //* isCellWhite: whether light square or dark square
 //* file: file coordinate of the current cell
@@ -12,17 +11,9 @@ export default function Cell(props){
     const cellContent = props.piece? props.piece.type : "";
 
     return <div
-        class={" aspect-square" + cellColor}
-        onClick={() => {
-            console.log("Clicked Cell " + props.file + props.rank);
-
-            if(props.isHoldingPiece()){
-                props.piecePutDownHandler(props.file, props.rank);
-
-            }else if(props.piece){
-                props.piecePickUpHandler(props.file, props.rank);
-            }
-        }}>
+            class={" aspect-square" + cellColor}
+            onClick={console.log("Hello")}
+        >
             <div class={"text-xs" + cellCoordinateColor}>
                 {props.file + props.rank}
             </div>
