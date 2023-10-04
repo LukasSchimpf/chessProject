@@ -88,7 +88,9 @@ export default function ChessBoard(props){
               file={file}
               rank={rank}
               piece={gameState().board[boardIndex]}
-              // handleClickCell={handleClickCell}
+              handleClickCell={() => {
+                handleClickCell(file, rank)
+              }}
             />
         }
       }
