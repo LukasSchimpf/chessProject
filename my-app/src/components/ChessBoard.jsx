@@ -19,8 +19,7 @@ function isCellWhite(file, rank){
 }
 
 function handleClickCell(pos){
-  console.log("Clicked Cell "+ pos);
-
+  // console.log("Clicked Cell "+ pos);
 
   if(moveFromCell().length != 0){
       putDownPiece(pos);
@@ -33,15 +32,14 @@ function handleClickCell(pos){
 }
 
 function pickUpPiece(pos){
-  console.log("Possible Moves:")
-  console.log(possibleMoves(gameState(), pos));
-  console.log("Picked up "+ getPiece(gameState().board, pos) + " at " + pos );
+  console.log("Picked up "+ getPiece(gameState().board, pos).type + " at " + pos );
+  console.log("Possible Moves:", possibleMoves(gameState(),pos));
 
   setMoveFromCell(pos);
 }
 
 function putDownPiece(pos){
-  console.log("Placed down piece at " + pos);
+  console.log("Placed down at " + pos);
   const [success, newGameState] = makeMove(gameState(), moveFromCell(), pos);
   
   // Reset the current picked up piece
@@ -76,8 +74,8 @@ export default function ChessBoard(props){
                     return(
                       <Cell
                         isCellWhite={isCellWhite(file, rank)}
-                        file={files[file]}
-                        rank={rank+1}
+                        displayFile={files[file]}
+                        displayRank={rank+1}
                         piece={gameState().board[rank][file]}
                         handleClick={() => {
                           handleClickCell([rank, file]);

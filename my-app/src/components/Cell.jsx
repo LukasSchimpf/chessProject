@@ -17,7 +17,7 @@ export default function Cell(props){
             // onMouseUp={props.handleRelease}
         >
             <div class={"text-xs" + cellCoordinateColor}>
-                {props.file + props.rank}
+                {props.displayFile + props.displayRank}
             </div>
             <div class={" text-4xl text-center"+ pieceColor}>
                 {cellContent}

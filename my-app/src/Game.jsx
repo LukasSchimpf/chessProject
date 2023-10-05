@@ -79,6 +79,7 @@ export function possibleMoves(game, pos){
             break;
         
         case "R":
+            /*
             //Positive rank direction
             for(let i=pos[0]+1; i<8; i++){
                 const move = [i, pos[1]];
@@ -94,6 +95,7 @@ export function possibleMoves(game, pos){
                     break;
                 }
             }
+
 
             //Negative rank direction
             for(let i=pos[0]-1; i>-1; i--){
@@ -142,6 +144,11 @@ export function possibleMoves(game, pos){
                     break;
                 }
             }
+            */
+            moves = moves.concat(lineMoves(game, pos, [1,0]))
+            moves = moves.concat(lineMoves(game, pos, [-1,0]))
+            moves = moves.concat(lineMoves(game, pos, [0,1]))
+            moves = moves.concat(lineMoves(game, pos, [0,-1]))
 
             break;
 
@@ -156,12 +163,60 @@ export function possibleMoves(game, pos){
             moves.push([pos[0] - 2, pos[1] + 1]);
 
             break;
+
+        case "B":
+            // Direction Positive file Positive Rank
+            for(let i=Math.min(pos[0], pos[1]); i<7; i++){
+                const move = [pos[0] + i, pos[1] + i];
+
+                if(!hasPiece(game.board, move)){
+                    moves.push(move);
+
+                }else if(getPiece(game.board, move).isWhite != piece.isWhite){
+                    moves.push(move);
+                    break;
+
+                }else{
+                    break;
+                }
+            }
+
+            break;
     }
 
     // Filter out moves that are out of bounds
     moves = moves.filter(move => !isOutOfBounds(move))
 
     // TODO: REMOVE MOVES THAT WOULD LEAD TO SELF CHECK
+
+    return moves;
+}
+
+function lineMoves(game, pos, direction){
+    let moves = [];
+    let i = 0;
+
+    while(true){
+        i++;
+        const move = [pos[0] + i*direction[0], pos[1]+ i*direction[1]];
+
+        if(isOutOfBounds(move)){
+            break;
+
+        }else if(!hasPiece(game.board, move)){
+            moves.push(move);
+
+        }else if(getPiece(game.board, move).isWhite != getPiece(game.board, pos).isWhite){
+            moves.push(move);
+            break;
+
+        }else if(getPiece(game.board, pos).isWhite == getPiece(game.board,move). isWhite){
+            break;
+
+        }else{
+            console.log("Error");
+        }
+    }
 
     return moves;
 }
