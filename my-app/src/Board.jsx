@@ -8,10 +8,22 @@ function initPiece(isWhite = true, type = ""){
 // create board data structure
 export function createBoard(){
   let board = [];
-  for(let i=0; i<64;i++){
-    board[i] = {};
+
+  for(let i=0; i<8; i++){
+    board.push([]);
+
+    for(let j=0; j<8; j++){
+      board[i].push({})
+    }
   }
+
   return board;
+}
+
+// Returns the piece at the given field of the chess board
+export function getPiece(board, pos){
+
+  return board[pos[0]][pos[1]];
 }
 
 // Populate board with pieces in starting layout
@@ -19,72 +31,52 @@ export function initBoard(board){
   let newBoard = structuredClone(board);
 
   // White Back Rank
-  newBoard[0] = initPiece(true, "R");
-  newBoard[1] = initPiece(true, "N");
-  newBoard[2] = initPiece(true, "B");
-  newBoard[3] = initPiece(true, "Q");
-  newBoard[4] = initPiece(true, "K");
-  newBoard[5] = initPiece(true, "B");
-  newBoard[6] = initPiece(true, "N");
-  newBoard[7] = initPiece(true, "R");
+  newBoard[0][0] = initPiece(true, "R");
+  newBoard[0][1] = initPiece(true, "N");
+  newBoard[0][2] = initPiece(true, "B");
+  newBoard[0][3] = initPiece(true, "Q");
+  newBoard[0][4] = initPiece(true, "K");
+  newBoard[0][5] = initPiece(true, "B");
+  newBoard[0][6] = initPiece(true, "N");
+  newBoard[0][7] = initPiece(true, "R");
 
   // White Pawns
-  for(let i=8; i<16; i++){
-    newBoard[i] = initPiece(true, "P");
+  for(let i=0; i<8; i++){
+    newBoard[1][i] = initPiece(true, "P");
   }
 
   // Black Back Rank
-  newBoard[56] = initPiece(false, "R");
-  newBoard[57] = initPiece(false, "N");
-  newBoard[58] = initPiece(false, "B");
-  newBoard[59] = initPiece(false, "Q");
-  newBoard[60] = initPiece(false, "K");
-  newBoard[61] = initPiece(false, "B");
-  newBoard[62] = initPiece(false, "N");
-  newBoard[63] = initPiece(false, "R");
+  newBoard[7][0] = initPiece(false, "R");
+  newBoard[7][1] = initPiece(false, "N");
+  newBoard[7][2] = initPiece(false, "B");
+  newBoard[7][3] = initPiece(false, "Q");
+  newBoard[7][4] = initPiece(false, "K");
+  newBoard[7][5] = initPiece(false, "B");
+  newBoard[7][6] = initPiece(false, "N");
+  newBoard[7][7] = initPiece(false, "R");
 
-  // Black Pawns
-  for(let i=48; i<56; i++){
-    newBoard[i] = initPiece(false, "P");
+  // White Pawns
+  for(let i=0; i<8; i++){
+    newBoard[6][i] = initPiece(false, "P");
   }
-
   return newBoard;
 }
 
-// Returns the index within the board datastructure of the field with given file and rank
-function cellIndex(file, rank){
-  const fileNum = files.indexOf(file);
+export function hasPiece(board, pos){
+  const [file, rank] = pos;
 
-  return (rank-1)*8 + fileNum;
+  if(Object.keys(board[file][rank]).length == 0)
+    return false;
+
+  return true;
 }
 
-// Returns the piece at the given field of the chess board
-export function getPiece(board, file, rank){
-  return board[cellIndex(file,rank)];
-}
-
-export function isEmpty(board, file, rank){
-  if(Object.keys(board[cellIndex(file, rank)]).length == 0)
-    return true;
-  return false;
-}
-
-export function setPiece(board, file, rank, piece){
+export function movePiece(board, pos1, pos2){
   let newBoard = structuredClone(board);
 
-  newBoard[cellIndex(file, rank)] = piece;
-  return newBoard;
-}
-
-export function movePiece(board, fromFile, fromRank, toFile, toRank){
-  let newBoard = structuredClone(board);
-
-  const fromIndex = cellIndex(fromFile, fromRank);
-  const toIndex = cellIndex(toFile, toRank);
-
-  const piece = newBoard[fromIndex];
-  newBoard[toIndex] = piece;
-  newBoard[fromIndex] = {};
+  const piece = newBoard[pos1[0]][pos1[1]];
+  newBoard[pos2[0]][pos2[1]] = piece;
+  newBoard[pos1[0]][pos1[1]] = {};
 
   return newBoard;
 }

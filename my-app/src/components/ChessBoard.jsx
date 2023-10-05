@@ -1,15 +1,15 @@
 import Cell from "./Cell";
 import { createSignal } from "solid-js";
 import { makeMove,createGame } from "../Game";
-import { getPiece, isEmpty } from "../Board";
+import { getPiece, hasPiece} from "../Board";
 
 const files = ['a','b','c','d','e','f','g','h'];
 const [moveFromCell, setMoveFromCell] = createSignal([]);
 const [gameState, setGameState] = createSignal(createGame());
 
-function isCellWhite(index){
-  const isRowOdd = ((Math.floor(index/8)) %2 == 1);
-  const isCellOdd = (index % 2 == 1);
+function isCellWhite(file, rank){
+  const isRowOdd = (file %2 == 1);
+  const isCellOdd = (rank % 2 == 1);
 
   if(isRowOdd){
     return isCellOdd;
@@ -18,44 +18,28 @@ function isCellWhite(index){
   }
 }
 
-// Converts index to order in which chess board cells are to be rendered
-function convertToBoardIndex(index){
-
-  const file = index % 8;
-  const rank = 7 - Math.floor(index/8)
-
-  return rank*8 + file;
-}
-
-function cellCoordinates(index){
-
-  const rank = Math.floor(index/8) + 1;
-  const file = files[index % 8];
-
-  return [file, rank];
-}
-
-function handleClickCell(file, rank){
-  console.log("Clicked Cell "+file+rank);
+function handleClickCell(pos){
+  console.log("Clicked Cell "+ pos);
 
   if(moveFromCell().length != 0){
-      putDownPiece(file, rank);
+      putDownPiece(pos);
 
-  }else if(!isEmpty(gameState().board, file, rank)){
-      pickUpPiece(file, rank);
+  }else if(hasPiece(gameState().board, pos)){
+      pickUpPiece(pos);
   }else{
       console.log("Empty Cell")
   }
 }
 
-function pickUpPiece(file, rank){
-  console.log("Picked up piece at " + file+rank);
+function pickUpPiece(pos){
+  console.log("Picked up "+ getPiece(gameState().board, pos) + " at " + pos );
 
-  setMoveFromCell([file, rank]);
+  setMoveFromCell(pos);
 }
 
-function putDownPiece(file, rank){
-  const [success, newGameState] = makeMove(gameState(), moveFromCell()[0], moveFromCell()[1], file, rank);
+function putDownPiece(pos){
+  console.log("Placed down piece at " + pos);
+  const [success, newGameState] = makeMove(gameState(), moveFromCell(), pos);
   
   // Reset the current picked up piece
   setMoveFromCell([]);
@@ -75,22 +59,33 @@ export default function ChessBoard(props){
 
     return(
       <div class=" grid grid-cols-8">
-      <For each={props.whitePerspective()? gameState().board : gameState().board.toReversed()}>{
-        (item, index)=>{
+      <For each={gameState().board}>{
+        (column, columnIndex)=>{
+          return(
+            <div>
+              <For each={column}>
+                {
+                  (row, rowIndex)=>{
+                    console.log(props.whitePerspective?"White's Perspective":"Black's Perspective");
+                    let file = props.whitePerspective()? columnIndex() : 7 - columnIndex();
+                    let rank = props.whitePerspective()? 7-rowIndex() : rowIndex();
 
-          // Get index in order of rendering cells
-          const boardIndex = convertToBoardIndex(index());
-          const [file, rank] = cellCoordinates(boardIndex);
-
-          return <Cell 
-              isCellWhite={isCellWhite(boardIndex)}
-              file={file}
-              rank={rank}
-              piece={gameState().board[boardIndex]}
-              handleClick={() => {
-                handleClickCell(file, rank);
-              }}
-            />
+                    return(
+                      <Cell
+                        isCellWhite={isCellWhite(file, rank)}
+                        file={files[file]}
+                        rank={rank+1}
+                        piece={gameState().board[rank][file]}
+                        handleClick={() => {
+                          handleClickCell([rank, file]);
+                        }}
+                      />
+                    )
+                  }
+                }
+              </For>
+            </div>
+          )
         }
       }
       </For>
