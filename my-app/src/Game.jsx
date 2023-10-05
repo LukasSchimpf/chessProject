@@ -1,4 +1,4 @@
-import { createBoard, getPiece, initBoard, isInCheck, movePiece, hasPiece} from "./Board";
+import { createBoard, getPiece, initBoard, movePiece, hasPiece} from "./Board";
 
 export function createGame(){
     return {
@@ -10,8 +10,6 @@ export function createGame(){
 }
 
 export function makeMove(game, pos1, pos2){
-    const [fromFile, fromRank] = pos1;
-    const [toFile, toRank] = pos2;
 
     if(!isLegalMove(game, pos1, pos2)){
         return [false, {}];
@@ -24,6 +22,7 @@ export function makeMove(game, pos1, pos2){
     return [true, newGame];
 }
 
+// Checking generic legality of a move, regardless of piece
 function isLegalMove(game, pos1, pos2){
     // Trying to move an empty square
     if(!hasPiece(game.board, pos1)){
@@ -46,4 +45,56 @@ function isLegalMove(game, pos1, pos2){
     //   return false;
 
     return true;
+}
+
+function isInCheck(game, whiteNotBlack){
+  let kingPos = [];
+
+  for(let i=0; i<8; i++){
+    for(let j=0; j<8; i++){
+        const pos = [i,j];
+        if(hasPiece(game.board, pos) 
+        && getPiece(game.board, pos).type == "K"
+        && getPiece(game.board, pos).isWhite == whiteNotBlack){
+            kingPos = pos;
+            break;
+        }
+    }
+  }
+
+
+
+  return false;
+}
+
+export function possibleMoves(game, pos){
+    let moves = [];
+
+    if(!hasPiece(game.board, pos)){
+        return moves;
+    }
+
+    const piece = getPiece(game.board, pos);
+
+    switch(piece.type){
+        case "P":
+            // Direction in which pawn advances
+            const direction = piece.isWhite? 1: -1;
+
+            if(!hasPiece(game.board, [pos[0] + direction, pos[1]])){
+                moves.push([pos[0] + direction, pos[1]]);
+            }
+
+            if(!piece.hasMoved && !hasPiece(game.board, [pos[0] + 2*direction, pos[1]])){
+                moves.push([pos[0] + 2*direction, pos[1]]);
+            }
+
+            break;
+    }
+
+    // TODO: REMOVE MOVES THAT ARE OUT OF BOUNDS
+
+    // TODO: REMOVE MOVES THAT WOULD LEAD TO OWN CHECK
+
+    return moves;
 }

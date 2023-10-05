@@ -2,7 +2,7 @@ const files = ['a','b','c','d','e','f','g','h'];
 
 // create piece data structure
 function initPiece(isWhite = true, type = ""){
-  return {isWhite, type}
+  return {isWhite, type, hasMoved:false}
 }
 
 // create board data structure
@@ -74,23 +74,11 @@ export function hasPiece(board, pos){
 export function movePiece(board, pos1, pos2){
   let newBoard = structuredClone(board);
 
-  const piece = newBoard[pos1[0]][pos1[1]];
+  let piece = newBoard[pos1[0]][pos1[1]];
+  if(!piece.hasMoved)
+    piece.hasMoved = true;
   newBoard[pos2[0]][pos2[1]] = piece;
   newBoard[pos1[0]][pos1[1]] = {};
 
   return newBoard;
-}
-
-export function isInCheck(board, whiteNotBlack){
-  let indexOfKing = -1;
-
-  for(let i=0; i<64; i++){
-    if(Object.hasOwn(board[i], "type") && board[i].type == "K" && board[i].isWhite == whiteNotBlack)
-      indexOfKing = i;
-      break;
-  }
-
-  console.log("King found at "+indexOfKing);
-
-  return false;
 }

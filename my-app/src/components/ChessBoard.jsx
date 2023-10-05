@@ -1,6 +1,6 @@
 import Cell from "./Cell";
 import { createSignal } from "solid-js";
-import { makeMove,createGame } from "../Game";
+import { makeMove,createGame, possibleMoves } from "../Game";
 import { getPiece, hasPiece} from "../Board";
 
 const files = ['a','b','c','d','e','f','g','h'];
@@ -20,6 +20,9 @@ function isCellWhite(file, rank){
 
 function handleClickCell(pos){
   console.log("Clicked Cell "+ pos);
+
+  console.log("Possible Moves:")
+  console.log(possibleMoves(gameState(), pos));
 
   if(moveFromCell().length != 0){
       putDownPiece(pos);
