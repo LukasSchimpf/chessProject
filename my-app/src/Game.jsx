@@ -79,72 +79,6 @@ export function possibleMoves(game, pos){
             break;
         
         case "R":
-            /*
-            //Positive rank direction
-            for(let i=pos[0]+1; i<8; i++){
-                const move = [i, pos[1]];
-
-                if(!hasPiece(game.board, move)){
-                    moves.push(move);
-
-                }else if(getPiece(game.board, move).isWhite != piece.isWhite){
-                    moves.push(move);
-                    break;
-
-                }else{
-                    break;
-                }
-            }
-
-
-            //Negative rank direction
-            for(let i=pos[0]-1; i>-1; i--){
-                const move = [i, pos[1]];
-
-                if(!hasPiece(game.board, move)){
-                    moves.push(move);
-
-                }else if(getPiece(game.board, move).isWhite != piece.isWhite){
-                    moves.push(move);
-                    break;
-
-                }else{
-                    break;
-                }
-            }
-
-            //Positive file direction
-            for(let i=pos[1]+1; i<8; i++){
-                const move = [pos[0], i];
-
-                if(!hasPiece(game.board, move)){
-                    moves.push(move);
-
-                }else if(getPiece(game.board, move).isWhite != piece.isWhite){
-                    moves.push(move);
-                    break;
-
-                }else{
-                    break;
-                }
-            }
-
-            //Negative file direction
-            for(let i=pos[1]-1; i>-1; i--){
-                const move = [pos[0], i];
-
-                if(!hasPiece(game.board, move)){
-                    moves.push(move);
-
-                }else if(getPiece(game.board, move).isWhite != piece.isWhite){
-                    moves.push(move);
-                    break;
-
-                }else{
-                    break;
-                }
-            }
-            */
             moves = moves.concat(lineMoves(game, pos, [1,0]))
             moves = moves.concat(lineMoves(game, pos, [-1,0]))
             moves = moves.concat(lineMoves(game, pos, [0,1]))
@@ -165,27 +99,48 @@ export function possibleMoves(game, pos){
             break;
 
         case "B":
-            // Direction Positive file Positive Rank
-            for(let i=Math.min(pos[0], pos[1]); i<7; i++){
-                const move = [pos[0] + i, pos[1] + i];
+            moves = moves.concat(lineMoves(game, pos, [1,1]))
+            moves = moves.concat(lineMoves(game, pos, [1,-1]))
+            moves = moves.concat(lineMoves(game, pos, [-1,1]))
+            moves = moves.concat(lineMoves(game, pos, [-1,-1]))
 
-                if(!hasPiece(game.board, move)){
-                    moves.push(move);
+            break;
 
-                }else if(getPiece(game.board, move).isWhite != piece.isWhite){
-                    moves.push(move);
-                    break;
+        case "Q":
+            // Straights
+            moves = moves.concat(lineMoves(game, pos, [1,0]))
+            moves = moves.concat(lineMoves(game, pos, [-1,0]))
+            moves = moves.concat(lineMoves(game, pos, [0,1]))
+            moves = moves.concat(lineMoves(game, pos, [0,-1]))
 
-                }else{
-                    break;
-                }
-            }
+            // Diagonals
+            moves = moves.concat(lineMoves(game, pos, [1,1]))
+            moves = moves.concat(lineMoves(game, pos, [1,-1]))
+            moves = moves.concat(lineMoves(game, pos, [-1,1]))
+            moves = moves.concat(lineMoves(game, pos, [-1,-1]))
 
+            break;
+
+        case "K":
+            moves.push([pos[0]-1, pos[1]-1]);
+            moves.push([pos[0]-1, pos[1]]);
+            moves.push([pos[0]-1, pos[1]+1]);
+
+            moves.push([pos[0], pos[1]-1]);
+            moves.push([pos[0], pos[1]+1]);
+
+            moves.push([pos[0]+1, pos[1]-1]);
+            moves.push([pos[0]+1, pos[1]]);
+            moves.push([pos[0]+1, pos[1]+1]);
+            
             break;
     }
 
     // Filter out moves that are out of bounds
     moves = moves.filter(move => !isOutOfBounds(move))
+
+    // Filter out moves that would collide with a piece of the same color
+    moves = moves.filter(move => !(hasPiece(game.board, move) && getPiece(game.board, move).isWhite == piece.isWhite));
 
     // TODO: REMOVE MOVES THAT WOULD LEAD TO SELF CHECK
 
