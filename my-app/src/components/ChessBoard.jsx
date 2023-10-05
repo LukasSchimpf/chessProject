@@ -1,7 +1,6 @@
 import Cell from "./Cell";
 import { createSignal } from "solid-js";
-import { makeMove,createGame, possibleMoves } from "../Game";
-import { getPiece, hasPiece} from "../Board";
+import { makeMove,createGame, possibleMoves, boardGetPiece, boardHasPiece } from "../Game";
 
 const files = ['a','b','c','d','e','f','g','h'];
 const [moveFromCell, setMoveFromCell] = createSignal([]);
@@ -24,7 +23,7 @@ function handleClickCell(pos){
   if(moveFromCell().length != 0){
       putDownPiece(pos);
 
-  }else if(hasPiece(gameState().board, pos)){
+  }else if(boardHasPiece(gameState(), pos)){
       pickUpPiece(pos);
   }else{
       console.log("Empty Cell")
@@ -32,7 +31,7 @@ function handleClickCell(pos){
 }
 
 function pickUpPiece(pos){
-  console.log("Picked up "+ getPiece(gameState().board, pos).type + " at " + pos );
+  console.log("Picked up "+ boardGetPiece(gameState(), pos).type + " at " + pos );
   console.log("Possible Moves:", possibleMoves(gameState(),pos));
 
   setMoveFromCell(pos);

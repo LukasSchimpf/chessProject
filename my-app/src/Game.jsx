@@ -37,6 +37,9 @@ function isInCheck(game, whiteNotBlack){
         }
     }
   }
+
+  //Todo Implement
+
   return false;
 }
 
@@ -132,6 +135,8 @@ export function possibleMoves(game, pos){
             moves.push([pos[0]+1, pos[1]-1]);
             moves.push([pos[0]+1, pos[1]]);
             moves.push([pos[0]+1, pos[1]+1]);
+
+            // TODO Implement Castling
             
             break;
     }
@@ -142,7 +147,7 @@ export function possibleMoves(game, pos){
     // Filter out moves that would collide with a piece of the same color
     moves = moves.filter(move => !(hasPiece(game.board, move) && getPiece(game.board, move).isWhite == piece.isWhite));
 
-    // TODO: REMOVE MOVES THAT WOULD LEAD TO SELF CHECK
+    // TODO REMOVE MOVES THAT WOULD LEAD TO SELF CHECK
 
     return moves;
 }
@@ -174,4 +179,12 @@ function lineMoves(game, pos, direction){
     }
 
     return moves;
+}
+
+export function boardHasPiece(game, pos){
+    return hasPiece(game.board, pos);
+}
+
+export function boardGetPiece(game, pos){
+    return getPiece(game.board, pos);
 }

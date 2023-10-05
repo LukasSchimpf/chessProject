@@ -1,5 +1,3 @@
-const files = ['a','b','c','d','e','f','g','h'];
-
 // create piece data structure
 function initPiece(isWhite = true, type = ""){
   return {isWhite, type, hasMoved:false}
