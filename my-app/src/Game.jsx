@@ -144,14 +144,22 @@ export function possibleMoves(game, pos){
             }
 
             break;
+
+        case "N":
+            moves.push([pos[0] + 2, pos[1] - 1]);
+            moves.push([pos[0] + 2, pos[1] + 1]);
+            moves.push([pos[0] + 1, pos[1] - 2]);
+            moves.push([pos[0] + 1, pos[1] + 2]);
+            moves.push([pos[0] - 1, pos[1] - 2]);
+            moves.push([pos[0] - 1, pos[1] + 2]);
+            moves.push([pos[0] - 2, pos[1] - 1]);
+            moves.push([pos[0] - 2, pos[1] + 1]);
+
+            break;
     }
 
-    // Remove moves that are out of bounds
-    moves.forEach(move => {
-        if(isOutOfBounds(move)){
-            moves.pop(move);
-        }
-    });
+    // Filter out moves that are out of bounds
+    moves = moves.filter(move => !isOutOfBounds(move))
 
     // TODO: REMOVE MOVES THAT WOULD LEAD TO SELF CHECK
 
