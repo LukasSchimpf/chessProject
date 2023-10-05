@@ -1,4 +1,4 @@
-import { createBoard, getPiece, initBoard, movePiece, hasPiece} from "./Board";
+import { createBoard, getPiece, initBoard, movePiece, hasPiece, isOutOfBounds} from "./Board";
 
 export function createGame(){
     return {
@@ -11,8 +11,9 @@ export function createGame(){
 
 export function makeMove(game, pos1, pos2){
 
-    if(!isLegalMove(game, pos1, pos2)){
-        return [false, {}];
+    // If move is in possible moves
+    if(!possibleMoves(game, pos1).some(move =>(move[0] == pos2[0] && move[1] == pos2[1]))){
+        return [false, game];
     }
 
     let newGame = structuredClone(game);
@@ -20,31 +21,6 @@ export function makeMove(game, pos1, pos2){
     newGame.whitesTurn = !game.whitesTurn;
 
     return [true, newGame];
-}
-
-// Checking generic legality of a move, regardless of piece
-function isLegalMove(game, pos1, pos2){
-    // Trying to move an empty square
-    if(!hasPiece(game.board, pos1)){
-        console.log("No Piece at from position")
-        return false;
-    }
-
-    // Trying to move other color's piece
-    if(game.whitesTurn != getPiece(game.board,pos1).isWhite){
-        console.log("Not your colored piece")
-        return false;
-    }
-
-    // Trying to take one's own piece
-    if(getPiece(game.board,pos1).isWhite == getPiece(game.board,pos2).isWhite)
-        return false;
-
-    // const potentailBoard = movePiece(game.board, fromFile, toFile, fromRank, toRank);
-    // if(isInCheck(potentailBoard, game.whitesTurn))
-    //   return false;
-
-    return true;
 }
 
 function isInCheck(game, whiteNotBlack){
@@ -61,9 +37,6 @@ function isInCheck(game, whiteNotBlack){
         }
     }
   }
-
-
-
   return false;
 }
 
@@ -80,21 +53,40 @@ export function possibleMoves(game, pos){
         case "P":
             // Direction in which pawn advances
             const direction = piece.isWhite? 1: -1;
+            const advance1 = [pos[0] + direction, pos[1]];
+            const advance2 = [pos[0] + 2*direction, pos[1]];
+            const frontRight = [pos[0] + direction, pos[1] - 1];
+            const frontLeft = [pos[0] + direction, pos[1] + 1];
 
-            if(!hasPiece(game.board, [pos[0] + direction, pos[1]])){
-                moves.push([pos[0] + direction, pos[1]]);
+            if(!hasPiece(game.board, advance1)){
+                moves.push(advance1);
             }
 
-            if(!piece.hasMoved && !hasPiece(game.board, [pos[0] + 2*direction, pos[1]])){
-                moves.push([pos[0] + 2*direction, pos[1]]);
+            if(!piece.hasMoved && !hasPiece(game.board, advance2)){
+                moves.push(advance2);
+            }
+
+            if(hasPiece(game.board, frontLeft)
+            && getPiece(game.board, frontLeft).isWhite != piece.isWhite){
+                moves.push(frontLeft);
+            }
+
+            if(hasPiece(game.board, frontRight)
+            && getPiece(game.board, frontRight).isWhite != piece.isWhite){
+                moves.push(frontRight);
             }
 
             break;
     }
 
-    // TODO: REMOVE MOVES THAT ARE OUT OF BOUNDS
+    // Remove moves that are out of bounds
+    moves.forEach(move => {
+        if(isOutOfBounds(move)){
+            moves.pop(move);
+        }
+    });
 
-    // TODO: REMOVE MOVES THAT WOULD LEAD TO OWN CHECK
+    // TODO: REMOVE MOVES THAT WOULD LEAD TO SELF CHECK
 
     return moves;
 }

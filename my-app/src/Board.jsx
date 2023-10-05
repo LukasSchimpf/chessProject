@@ -22,6 +22,9 @@ export function createBoard(){
 
 // Returns the piece at the given field of the chess board
 export function getPiece(board, pos){
+  if(isOutOfBounds(pos)){
+    return {};
+  }
 
   return board[pos[0]][pos[1]];
 }
@@ -63,9 +66,13 @@ export function initBoard(board){
 }
 
 export function hasPiece(board, pos){
-  const [file, rank] = pos;
+  if(isOutOfBounds(pos)){
+    return false;
+  }
+  
+  const piece = board[pos[0]][pos[1]]
 
-  if(Object.keys(board[file][rank]).length == 0)
+  if(Object.keys(piece).length == 0)
     return false;
 
   return true;
@@ -81,4 +88,11 @@ export function movePiece(board, pos1, pos2){
   newBoard[pos1[0]][pos1[1]] = {};
 
   return newBoard;
+}
+
+export function isOutOfBounds(pos){
+  if(pos[0] < 0 || pos[0] > 7 || pos[1] < 0 ||pos[1] > 7){
+    return true;
+  }
+  return false;
 }

@@ -21,8 +21,6 @@ function isCellWhite(file, rank){
 function handleClickCell(pos){
   console.log("Clicked Cell "+ pos);
 
-  console.log("Possible Moves:")
-  console.log(possibleMoves(gameState(), pos));
 
   if(moveFromCell().length != 0){
       putDownPiece(pos);
@@ -35,6 +33,8 @@ function handleClickCell(pos){
 }
 
 function pickUpPiece(pos){
+  console.log("Possible Moves:")
+  console.log(possibleMoves(gameState(), pos));
   console.log("Picked up "+ getPiece(gameState().board, pos) + " at " + pos );
 
   setMoveFromCell(pos);
@@ -69,7 +69,7 @@ export default function ChessBoard(props){
               <For each={column}>
                 {
                   (row, rowIndex)=>{
-                    console.log(props.whitePerspective?"White's Perspective":"Black's Perspective");
+                    // console.log(props.whitePerspective?"White's Perspective":"Black's Perspective");
                     let file = props.whitePerspective()? columnIndex() : 7 - columnIndex();
                     let rank = props.whitePerspective()? 7-rowIndex() : rowIndex();
 
