@@ -77,6 +77,73 @@ export function possibleMoves(game, pos){
             }
 
             break;
+        
+        case "R":
+            //Positive rank direction
+            for(let i=pos[0]+1; i<8; i++){
+                const move = [i, pos[1]];
+
+                if(!hasPiece(game.board, move)){
+                    moves.push(move);
+
+                }else if(getPiece(game.board, move).isWhite != piece.isWhite){
+                    moves.push(move);
+                    break;
+
+                }else{
+                    break;
+                }
+            }
+
+            //Negative rank direction
+            for(let i=pos[0]-1; i>-1; i--){
+                const move = [i, pos[1]];
+
+                if(!hasPiece(game.board, move)){
+                    moves.push(move);
+
+                }else if(getPiece(game.board, move).isWhite != piece.isWhite){
+                    moves.push(move);
+                    break;
+
+                }else{
+                    break;
+                }
+            }
+
+            //Positive file direction
+            for(let i=pos[1]+1; i<8; i++){
+                const move = [pos[0], i];
+
+                if(!hasPiece(game.board, move)){
+                    moves.push(move);
+
+                }else if(getPiece(game.board, move).isWhite != piece.isWhite){
+                    moves.push(move);
+                    break;
+
+                }else{
+                    break;
+                }
+            }
+
+            //Negative file direction
+            for(let i=pos[1]-1; i>-1; i--){
+                const move = [pos[0], i];
+
+                if(!hasPiece(game.board, move)){
+                    moves.push(move);
+
+                }else if(getPiece(game.board, move).isWhite != piece.isWhite){
+                    moves.push(move);
+                    break;
+
+                }else{
+                    break;
+                }
+            }
+
+            break;
     }
 
     // Remove moves that are out of bounds
