@@ -18,7 +18,6 @@ function isCellWhite(file, rank){
 }
 
 function handleClickCell(pos){
-  // console.log("Clicked Cell "+ pos);
 
   if(moveFromCell().length != 0){
       putDownPiece(pos);

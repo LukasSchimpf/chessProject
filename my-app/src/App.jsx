@@ -1,7 +1,6 @@
 import { createSignal } from "solid-js";
 import ChessBoard from "./components/ChessBoard";
 
-
 function App() {
   const [whitePerspective, setWhitePerspective] = createSignal(true);
 
@@ -17,7 +16,7 @@ function App() {
       <button 
         onClick={() =>{
           setWhitePerspective(!whitePerspective());
-          console.log("Flipped Perspective")}
+          console.log("Flipped Perspective");}
         }
       >
           Flip Board
