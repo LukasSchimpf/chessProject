@@ -1,12 +1,17 @@
 import Cell from "./Cell";
 import { createSignal, For } from "solid-js";
-import { makeMove,createGame, possibleMoves, boardGetPiece, boardHasPiece } from "../Game";
+import { makeMove,createGame, possibleMoves, boardGetPiece, boardHasPiece, pos_t, piece_t} from "../Game";
 
 const files = ['a','b','c','d','e','f','g','h'];
-const [moveFromCell, setMoveFromCell] = createSignal([]);
+const [moveFromCell, setMoveFromCell] = createSignal([] as pos_t);
 const [gameState, setGameState] = createSignal(createGame());
 
-function isCellWhite(file:number, rank:number){
+/**
+ * @param file Index of the current cell's file (0 indexed).
+ * @param rank Index of the current cell's rank (0 indexed).
+ * @returns True if the cell is a white square, false otherwise.
+ */
+function isCellWhite(file:number, rank:number):boolean{
   const isRowOdd = (file %2 == 1);
   const isCellOdd = (rank % 2 == 1);
 
@@ -17,7 +22,7 @@ function isCellWhite(file:number, rank:number){
   }
 }
 
-function handleClickCell(pos:any){
+function handleClickCell(pos:pos_t){
 
   if(moveFromCell().length != 0){
       putDownPiece(pos);
@@ -29,14 +34,14 @@ function handleClickCell(pos:any){
   }
 }
 
-function pickUpPiece(pos:any){
-  console.log("Picked up "+ boardGetPiece(gameState(), pos).type + " at " + pos );
+function pickUpPiece(pos:pos_t){
+  console.log("Picked up "+ boardGetPiece(gameState(), pos) + " at " + pos );
   console.log("Possible Moves:", possibleMoves(gameState(),pos));
 
   setMoveFromCell(pos);
 }
 
-function putDownPiece(pos:any){
+function putDownPiece(pos:pos_t){
   console.log("Placed down at " + pos);
   const [success, newGameState] = makeMove(gameState(), moveFromCell(), pos);
   
@@ -53,17 +58,21 @@ function putDownPiece(pos:any){
   console.log(gameState())
 }
 
+/**
+ * 
+ * @param props.gameState (any): state of the game to be represented
+ * @param props.whitePerspective (boolean): whether white or black perspective
+ * @returns Chess board component
+ */
 export default function ChessBoard(props: any){
-  console.log(gameState());
 
-    return(
-      <div class=" grid grid-cols-8">
-      <For each={gameState().board}>{
-        (column : any, columnIndex: any)=>{
+  return(
+    <div class=" grid grid-cols-8">
+      <For each={Array(8)}>{
+        (col:any, columnIndex:any)=>{
           return(
             <div>
-              <For each={column}>
-                {
+              <For each={Array(8)}>{
                   (row: any, rowIndex: any)=>{
                     // console.log(props.whitePerspective?"White's Perspective":"Black's Perspective");
                     let file = props.whitePerspective? columnIndex() : 7 - columnIndex();
@@ -83,11 +92,11 @@ export default function ChessBoard(props: any){
                   }
                 }
               </For>
-            </div>
-          )
-        }
+          </div>
+        )
       }
-      </For>
-      </div>
-    )
+    }
+    </For>
+    </div>
+  )
 }

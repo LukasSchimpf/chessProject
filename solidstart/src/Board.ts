@@ -1,11 +1,19 @@
-// create piece data structure
-function initPiece(isWhite = true, type = ""){
+import {pos_t,piece_t} from "./Game";
+
+/**
+ * @param isWhite true if white piece, false if black
+ * @param type    string representing piece type
+ * @returns       Chess piece object
+ */
+function initPiece(isWhite:boolean = true, type:string = ""):any{
   return {isWhite, type, hasMoved:false}
 }
 
-// create board data structure
-export function createBoard(){
-  let board:any = [];
+/**
+ * @returns 2D array representing chessboard, outer index represents rank, inner represents file
+ */
+export function createBoard():any[][]{
+  let board:any[][] = [];
 
   for(let i=0; i<8; i++){
     board.push([]);
@@ -19,7 +27,12 @@ export function createBoard(){
 }
 
 // Returns the piece at the given field of the chess board
-export function getPiece(board:any, pos:any){
+/**
+ * @param board board to query
+ * @param pos   coordinates of the position to query
+ * @returns     piece if cell contains a piece, empty JsonObject otherwise
+ */
+export function getPiece(board:any, pos:pos_t){
   if(isOutOfBounds(pos)){
     return {};
   }
@@ -28,8 +41,8 @@ export function getPiece(board:any, pos:any){
 }
 
 // Populate board with pieces in starting layout
-export function initBoard(board:any){
-  let newBoard = structuredClone(board);
+export function initBoard(board:any):any[][]{
+  let newBoard:any[][] = {...board};
 
   // White Back Rank
   newBoard[0][0] = initPiece(true, "R");
@@ -60,15 +73,16 @@ export function initBoard(board:any){
   for(let i=0; i<8; i++){
     newBoard[6][i] = initPiece(false, "P");
   }
+
   return newBoard;
 }
 
-export function hasPiece(board:any, pos:any){
+export function hasPiece(board:any, pos:pos_t):boolean{
   if(isOutOfBounds(pos)){
     return false;
   }
   
-  const piece = board[pos[0]][pos[1]]
+  const piece:piece_t = board[pos[0]][pos[1]]
 
   if(Object.keys(piece).length == 0)
     return false;
@@ -76,19 +90,19 @@ export function hasPiece(board:any, pos:any){
   return true;
 }
 
-export function movePiece(board:any, pos1:any, pos2:any){
-  let newBoard = structuredClone(board);
+export function movePiece(board:any, pos1:number[], pos2:number[]):any{
+  let newBoard = {...board};
 
-  let piece = newBoard[pos1[0]][pos1[1]];
+  let piece:any = newBoard[pos1[0]][pos1[1]];
   if(!piece.hasMoved)
     piece.hasMoved = true;
   newBoard[pos2[0]][pos2[1]] = piece;
-  newBoard[pos1[0]][pos1[1]] = {};
+  newBoard[pos1[0]][pos1[1]] = {} as piece_t;
 
   return newBoard;
 }
 
-export function isOutOfBounds(pos:any){
+export function isOutOfBounds(pos:pos_t):boolean{
   if(pos[0] < 0 || pos[0] > 7 || pos[1] < 0 ||pos[1] > 7){
     return true;
   }

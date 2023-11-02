@@ -1,8 +1,11 @@
-//* Props:
-//* isCellWhite: whether light square or dark square
-//* file: file coordinate of the current cell
-//* rank: rank coordinate of the current cell
-//* piece: piece object of the current cell
+/**
+ * @param props.isCellWhite (boolean): True if the cell is a white square, false otherwise
+ * @param props.displayFile (char): Letter from 'a'-'h' representing the file coordinate that is displayed 
+ * @param props.displayRank (int): Integer from 1-8 representing the rank coordinate that is displayed 
+ * @param props.piece (JsonObj): Chess piece occupying the current cell
+ *      
+ * @returns Jsx of a single cell on the chess board
+ */
 export default function Cell(props:any){
     const cellColor = props.isCellWhite? " bg-light-square": " bg-dark-square";
     const cellCoordinateColor = !props.isCellWhite? " text-light-square":" text-dark-square";

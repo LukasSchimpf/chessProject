@@ -1,37 +1,45 @@
 import { createBoard, getPiece, initBoard, movePiece, hasPiece, isOutOfBounds} from "./Board";
 
-export function createGame(){
-    return {
+export type pos_t = number[];
+export type piece_t = {
+  isWhite: boolean,
+  type: string,
+  hasMoved: boolean
+};
+export function createGame():any{
+    let newGame = {
         board: initBoard(createBoard()),
         whitesTurn: true,
         whiteHasCastled: false,
         blackHasCastled: false
     };
+
+    return newGame;
 }
 
-export function makeMove(game: any, pos1: any, pos2: any){
+export function makeMove(game: any, pos1: pos_t, pos2: pos_t):[boolean, any]{
 
     // If move is in possible moves
-    if(!possibleMoves(game, pos1).some((move:any) =>(move[0] == pos2[0] && move[1] == pos2[1]))){
+    if(!possibleMoves(game, pos1).some((move:pos_t) =>(move[0] == pos2[0] && move[1] == pos2[1]))){
         return [false, game];
     }
 
-    let newGame = structuredClone(game);
+    let newGame: any = {...game};
     newGame.board = movePiece(game.board, pos1, pos2);
     newGame.whitesTurn = !game.whitesTurn;
 
     return [true, newGame];
 }
 
-function isInCheck(game: any, whiteNotBlack: boolean){
+function isInCheck(game: any, whiteNotBlack: boolean): boolean{
   let kingPos = [];
 
   for(let i=0; i<8; i++){
     for(let j=0; j<8; i++){
         const pos = [i,j];
         if(hasPiece(game.board, pos) 
-        && getPiece(game.board, pos).type == "K"
-        && getPiece(game.board, pos).isWhite == whiteNotBlack){
+        && (getPiece(game.board, pos)as piece_t).type == "K"
+        && (getPiece(game.board, pos) as piece_t).isWhite == whiteNotBlack){
             kingPos = pos;
             break;
         }
@@ -43,19 +51,19 @@ function isInCheck(game: any, whiteNotBlack: boolean){
   return false;
 }
 
-export function possibleMoves(game: any, pos:any){
-    let moves: any = [];
+export function possibleMoves(game: any, pos:pos_t): pos_t[]{
+    let moves: pos_t[] = [];
 
     if(!hasPiece(game.board, pos)){
         return moves;
     }
 
-    const piece = getPiece(game.board, pos);
+    const piece:piece_t = getPiece(game.board, pos) as piece_t;
 
     switch(piece.type){
         case "P":
             // Direction in which pawn advances
-            const direction = piece.isWhite? 1: -1;
+            const direction = (piece as piece_t).isWhite? 1: -1;
             const advance1 = [pos[0] + direction, pos[1]];
             const advance2 = [pos[0] + 2*direction, pos[1]];
             const frontRight = [pos[0] + direction, pos[1] - 1];
@@ -70,12 +78,12 @@ export function possibleMoves(game: any, pos:any){
             }
 
             if(hasPiece(game.board, frontLeft)
-            && getPiece(game.board, frontLeft).isWhite != piece.isWhite){
+            && (getPiece(game.board, frontLeft) as piece_t).isWhite != piece.isWhite){
                 moves.push(frontLeft);
             }
 
             if(hasPiece(game.board, frontRight)
-            && getPiece(game.board, frontRight).isWhite != piece.isWhite){
+            && (getPiece(game.board, frontRight) as piece_t).isWhite != piece.isWhite){
                 moves.push(frontRight);
             }
 
@@ -145,16 +153,16 @@ export function possibleMoves(game: any, pos:any){
     moves = moves.filter((move:any) => !isOutOfBounds(move))
 
     // Filter out moves that would collide with a piece of the same color
-    moves = moves.filter((move: any) => !(hasPiece(game.board, move) && getPiece(game.board, move).isWhite == piece.isWhite));
+    moves = moves.filter((move: any) => !(hasPiece(game.board, move) && (getPiece(game.board, move) as piece_t).isWhite == piece.isWhite));
 
     // TODO REMOVE MOVES THAT WOULD LEAD TO SELF CHECK
 
     return moves;
 }
 
-function lineMoves(game: any, pos: any, direction: any){
-    let moves = [];
-    let i = 0;
+function lineMoves(game: any, pos: pos_t, direction: number[]):pos_t[]{
+    let moves:pos_t[] = [];
+    let i:number = 0;
 
     while(true){
         i++;
@@ -166,11 +174,11 @@ function lineMoves(game: any, pos: any, direction: any){
         }else if(!hasPiece(game.board, move)){
             moves.push(move);
 
-        }else if(getPiece(game.board, move).isWhite != getPiece(game.board, pos).isWhite){
+        }else if((getPiece(game.board, move) as piece_t).isWhite != (getPiece(game.board, pos) as piece_t).isWhite){
             moves.push(move);
             break;
 
-        }else if(getPiece(game.board, pos).isWhite == getPiece(game.board,move). isWhite){
+        }else if((getPiece(game.board, pos) as piece_t).isWhite == (getPiece(game.board,move) as piece_t).isWhite){
             break;
 
         }else{
@@ -181,10 +189,10 @@ function lineMoves(game: any, pos: any, direction: any){
     return moves;
 }
 
-export function boardHasPiece(game:any, pos:number){
+export function boardHasPiece(game:any, pos:pos_t):boolean{
     return hasPiece(game.board, pos);
 }
 
-export function boardGetPiece(game:any, pos:number){
+export function boardGetPiece(game:any, pos:pos_t):piece_t | {}{
     return getPiece(game.board, pos);
 }
